@@ -150,7 +150,7 @@ fi
 
 echo "::group::Upgrade"
 
-if apt-cache show ${pgroonga_package} > /dev/null; then
+if sudo apt install -V -y --dry-run ${pgroonga_package} > /dev/null; then
   sudo apt purge -V -y ${pgroonga_package}
 
   # Disable upgrade test for first time packages.
