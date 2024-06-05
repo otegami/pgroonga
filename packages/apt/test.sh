@@ -150,22 +150,29 @@ fi
 
 echo "::group::Upgrade"
 
-sudo apt purge -V -y ${pgroonga_package}
+case ${code_name} in
+  noble)
+    echo "Skip upgrade test because there is no package for ${code_name} yet."
+    ;;
+  *)
+    sudo apt purge -V -y ${pgroonga_package}
 
-# Disable upgrade test for first time packages.
-# TODO: Automate this. We don't want to maintain this manually.
-# case ${postgresql_version} in
-#   16) # TODO: Remove this after 3.1.4 release.
-#     exit
-#     ;;
-# esac
+    # Disable upgrade test for first time packages.
+    # TODO: Automate this. We don't want to maintain this manually.
+    # case ${postgresql_version} in
+    #   16) # TODO: Remove this after 3.1.4 release.
+    #     exit
+    #     ;;
+    # esac
 
-sudo apt install -V -y ${pgroonga_package}
-createdb upgrade
-psql upgrade -c 'CREATE EXTENSION pgroonga'
-apt install -V -y \
-  ${repositories_dir}/${os}/pool/${code_name}/*/*/*/*_${architecture}.deb
-psql upgrade -c 'ALTER EXTENSION pgroonga UPDATE'
+    sudo apt install -V -y ${pgroonga_package}
+    createdb upgrade
+    psql upgrade -c 'CREATE EXTENSION pgroonga'
+    apt install -V -y \
+      ${repositories_dir}/${os}/pool/${code_name}/*/*/*/*_${architecture}.deb
+    psql upgrade -c 'ALTER EXTENSION pgroonga UPDATE'
+    ;;
+esac
 
 echo "::endgroup::"
 
