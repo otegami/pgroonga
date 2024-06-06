@@ -152,7 +152,7 @@ echo "::group::Upgrade"
 
 sudo apt purge -V -y ${pgroonga_package}
 
-if sudo apt install -V -y ${pgroonga_package} > /dev/null; then
+if sudo apt install -V -y --dry-run ${pgroonga_package} > /dev/null; then
   # Disable upgrade test for first time packages.
   # TODO: Automate this. We don't want to maintain this manually.
   # case ${postgresql_version} in
@@ -160,7 +160,10 @@ if sudo apt install -V -y ${pgroonga_package} > /dev/null; then
   #     exit
   #     ;;
   # esac
+  apt-cache show ${pgroonga_package}
+  apt-cache policy ${pgroonga_package}
 
+  sudo apt install -V -y ${pgroonga_package}
   createdb upgrade
   psql upgrade -c 'CREATE EXTENSION pgroonga'
   apt install -V -y \
