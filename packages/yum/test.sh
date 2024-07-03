@@ -83,6 +83,7 @@ ${DNF} install -y \
        bc \
        diffutils \
        groonga-tokenizer-mecab \
+       lsof \
        ruby \
        sudo
 

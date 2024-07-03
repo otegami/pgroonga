@@ -77,6 +77,7 @@ fi
 apt install -V -y \
     groonga-token-filter-stem \
     groonga-tokenizer-mecab \
+    lsof \
     ruby \
     sudo
 
@@ -102,7 +103,6 @@ else
 fi
 
 data_dir=/tmp/data
-sudo systemctl stop postgresql
 sudo -u postgres -H \
      $(pg_config --bindir)/initdb \
      --encoding=UTF-8 \
