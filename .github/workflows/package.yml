@@ -78,72 +78,72 @@ jobs:
       matrix:
         package-id:
           - postgresql-16-pgdg-pgroonga-debian-bookworm
-          - postgresql-16-pgdg-pgroonga-debian-bookworm-arm64
-          - postgresql-16-pgdg-pgroonga-ubuntu-focal
-          - postgresql-16-pgdg-pgroonga-ubuntu-focal-arm64
+          # - postgresql-16-pgdg-pgroonga-debian-bookworm-arm64
+          # - postgresql-16-pgdg-pgroonga-ubuntu-focal
+          # - postgresql-16-pgdg-pgroonga-ubuntu-focal-arm64
           - postgresql-16-pgdg-pgroonga-ubuntu-jammy
-          - postgresql-16-pgdg-pgroonga-ubuntu-jammy-arm64
-          - postgresql-16-pgdg-pgroonga-ubuntu-noble
-          - postgresql-16-pgdg-pgroonga-ubuntu-noble-arm64
+          # - postgresql-16-pgdg-pgroonga-ubuntu-jammy-arm64
+          # - postgresql-16-pgdg-pgroonga-ubuntu-noble
+          # - postgresql-16-pgdg-pgroonga-ubuntu-noble-arm64
           - postgresql-16-pgdg-pgroonga-almalinux-9
           - postgresql-16-pgdg-pgroonga-almalinux-8
-          - postgresql-16-pgroonga-ubuntu-noble
-          - postgresql-15-pgdg-pgroonga-debian-bookworm
-          - postgresql-15-pgdg-pgroonga-debian-bookworm-arm64
-          - postgresql-15-pgdg-pgroonga-debian-bullseye
-          - postgresql-15-pgdg-pgroonga-debian-bullseye-arm64
-          - postgresql-15-pgdg-pgroonga-ubuntu-focal
-          - postgresql-15-pgdg-pgroonga-ubuntu-focal-arm64
-          - postgresql-15-pgdg-pgroonga-ubuntu-jammy
-          - postgresql-15-pgdg-pgroonga-ubuntu-jammy-arm64
-          - postgresql-15-pgdg-pgroonga-ubuntu-noble
-          - postgresql-15-pgdg-pgroonga-ubuntu-noble-arm64
-          - postgresql-15-pgdg-pgroonga-almalinux-9
-          - postgresql-15-pgdg-pgroonga-almalinux-8
-          - postgresql-15-pgdg-pgroonga-centos-7
-          - postgresql-15-pgroonga-debian-bookworm
-          - postgresql-15-pgroonga-debian-bookworm-arm64
-          - postgresql-14-pgdg-pgroonga-debian-bookworm
-          - postgresql-14-pgdg-pgroonga-debian-bookworm-arm64
-          - postgresql-14-pgdg-pgroonga-debian-bullseye
-          - postgresql-14-pgdg-pgroonga-debian-bullseye-arm64
-          - postgresql-14-pgdg-pgroonga-ubuntu-focal
-          - postgresql-14-pgdg-pgroonga-ubuntu-focal-arm64
-          - postgresql-14-pgdg-pgroonga-ubuntu-jammy
-          - postgresql-14-pgdg-pgroonga-ubuntu-jammy-arm64
-          - postgresql-14-pgdg-pgroonga-ubuntu-noble
-          - postgresql-14-pgdg-pgroonga-ubuntu-noble-arm64
-          - postgresql-14-pgdg-pgroonga-almalinux-8
-          - postgresql-14-pgdg-pgroonga-centos-7
-          - postgresql-14-pgroonga-ubuntu-jammy
-          - postgresql-13-pgdg-pgroonga-debian-bookworm
-          - postgresql-13-pgdg-pgroonga-debian-bookworm-arm64
-          - postgresql-13-pgdg-pgroonga-debian-bullseye
-          - postgresql-13-pgdg-pgroonga-debian-bullseye-arm64
-          - postgresql-13-pgdg-pgroonga-ubuntu-focal
-          - postgresql-13-pgdg-pgroonga-ubuntu-focal-arm64
-          - postgresql-13-pgdg-pgroonga-ubuntu-jammy
-          - postgresql-13-pgdg-pgroonga-ubuntu-jammy-arm64
-          - postgresql-13-pgdg-pgroonga-ubuntu-noble
-          - postgresql-13-pgdg-pgroonga-ubuntu-noble-arm64
-          - postgresql-13-pgdg-pgroonga-almalinux-8
-          - postgresql-13-pgdg-pgroonga-centos-7
-          - postgresql-13-pgroonga-debian-bullseye
-          - postgresql-13-pgroonga-debian-bullseye-arm64
-          - postgresql-12-pgdg-pgroonga-debian-bookworm
-          - postgresql-12-pgdg-pgroonga-debian-bookworm-arm64
-          - postgresql-12-pgdg-pgroonga-debian-bullseye
-          - postgresql-12-pgdg-pgroonga-debian-bullseye-arm64
-          - postgresql-12-pgdg-pgroonga-ubuntu-focal
-          - postgresql-12-pgdg-pgroonga-ubuntu-focal-arm64
-          - postgresql-12-pgdg-pgroonga-ubuntu-jammy
-          - postgresql-12-pgdg-pgroonga-ubuntu-jammy-arm64
-          - postgresql-12-pgdg-pgroonga-ubuntu-noble
-          - postgresql-12-pgdg-pgroonga-ubuntu-noble-arm64
-          - postgresql-12-pgdg-pgroonga-almalinux-8
-          - postgresql-12-pgdg-pgroonga-centos-7
-          - postgresql-12-pgroonga-ubuntu-focal
-          - postgresql-12-pgroonga-centos-7
+          # - postgresql-16-pgroonga-ubuntu-noble
+          # - postgresql-15-pgdg-pgroonga-debian-bookworm
+          # - postgresql-15-pgdg-pgroonga-debian-bookworm-arm64
+          # - postgresql-15-pgdg-pgroonga-debian-bullseye
+          # - postgresql-15-pgdg-pgroonga-debian-bullseye-arm64
+          # - postgresql-15-pgdg-pgroonga-ubuntu-focal
+          # - postgresql-15-pgdg-pgroonga-ubuntu-focal-arm64
+          # - postgresql-15-pgdg-pgroonga-ubuntu-jammy
+          # - postgresql-15-pgdg-pgroonga-ubuntu-jammy-arm64
+          # - postgresql-15-pgdg-pgroonga-ubuntu-noble
+          # - postgresql-15-pgdg-pgroonga-ubuntu-noble-arm64
+          # - postgresql-15-pgdg-pgroonga-almalinux-9
+          # - postgresql-15-pgdg-pgroonga-almalinux-8
+          # - postgresql-15-pgdg-pgroonga-centos-7
+          # - postgresql-15-pgroonga-debian-bookworm
+          # - postgresql-15-pgroonga-debian-bookworm-arm64
+          # - postgresql-14-pgdg-pgroonga-debian-bookworm
+          # - postgresql-14-pgdg-pgroonga-debian-bookworm-arm64
+          # - postgresql-14-pgdg-pgroonga-debian-bullseye
+          # - postgresql-14-pgdg-pgroonga-debian-bullseye-arm64
+          # - postgresql-14-pgdg-pgroonga-ubuntu-focal
+          # - postgresql-14-pgdg-pgroonga-ubuntu-focal-arm64
+          # - postgresql-14-pgdg-pgroonga-ubuntu-jammy
+          # - postgresql-14-pgdg-pgroonga-ubuntu-jammy-arm64
+          # - postgresql-14-pgdg-pgroonga-ubuntu-noble
+          # - postgresql-14-pgdg-pgroonga-ubuntu-noble-arm64
+          # - postgresql-14-pgdg-pgroonga-almalinux-8
+          # - postgresql-14-pgdg-pgroonga-centos-7
+          # - postgresql-14-pgroonga-ubuntu-jammy
+          # - postgresql-13-pgdg-pgroonga-debian-bookworm
+          # - postgresql-13-pgdg-pgroonga-debian-bookworm-arm64
+          # - postgresql-13-pgdg-pgroonga-debian-bullseye
+          # - postgresql-13-pgdg-pgroonga-debian-bullseye-arm64
+          # - postgresql-13-pgdg-pgroonga-ubuntu-focal
+          # - postgresql-13-pgdg-pgroonga-ubuntu-focal-arm64
+          # - postgresql-13-pgdg-pgroonga-ubuntu-jammy
+          # - postgresql-13-pgdg-pgroonga-ubuntu-jammy-arm64
+          # - postgresql-13-pgdg-pgroonga-ubuntu-noble
+          # - postgresql-13-pgdg-pgroonga-ubuntu-noble-arm64
+          # - postgresql-13-pgdg-pgroonga-almalinux-8
+          # - postgresql-13-pgdg-pgroonga-centos-7
+          # - postgresql-13-pgroonga-debian-bullseye
+          # - postgresql-13-pgroonga-debian-bullseye-arm64
+          # - postgresql-12-pgdg-pgroonga-debian-bookworm
+          # - postgresql-12-pgdg-pgroonga-debian-bookworm-arm64
+          # - postgresql-12-pgdg-pgroonga-debian-bullseye
+          # - postgresql-12-pgdg-pgroonga-debian-bullseye-arm64
+          # - postgresql-12-pgdg-pgroonga-ubuntu-focal
+          # - postgresql-12-pgdg-pgroonga-ubuntu-focal-arm64
+          # - postgresql-12-pgdg-pgroonga-ubuntu-jammy
+          # - postgresql-12-pgdg-pgroonga-ubuntu-jammy-arm64
+          # - postgresql-12-pgdg-pgroonga-ubuntu-noble
+          # - postgresql-12-pgdg-pgroonga-ubuntu-noble-arm64
+          # - postgresql-12-pgdg-pgroonga-almalinux-8
+          # - postgresql-12-pgdg-pgroonga-centos-7
+          # - postgresql-12-pgroonga-ubuntu-focal
+          # - postgresql-12-pgroonga-centos-7
           # Groonga 11.0.5 or later is required
           # - pgroonga-fedora-33
     env:
@@ -193,19 +193,16 @@ jobs:
               echo "PACKAGE_TYPE=yum" >> ${GITHUB_ENV}
               ;;
           esac
-          test_docker_image=$(echo ${os} | sed -E -e 's/-/:/g')
-          case ${test_docker_image} in
-            *:arm64)
+          test_incus_image=$(echo ${os} | sed -E -e 's/-/\//g')
+          case ${test_incus_image} in
+            */arm64)
               echo "ARCHITECTURE=arm64" >> ${GITHUB_ENV}
-              test_docker_image="$(echo ${test_docker_image} | \
-                                     sed -E -e 's/:arm64$//g')"
-              test_docker_image="arm64v8/${test_docker_image}"
               ;;
             *)
               echo "ARCHITECTURE=amd64" >> ${GITHUB_ENV}
               ;;
           esac
-          echo "TEST_DOCKER_IMAGE=${test_docker_image}" >> ${GITHUB_ENV}
+          echo "TEST_INCUS_IMAGE=images:${test_incus_image}" >> ${GITHUB_ENV}
       - name: Cache ccache
         uses: actions/cache@v4
         with:
@@ -247,16 +244,62 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       # Test
+      - name: Install Incus
+        if: |
+          env.ARCHITECTURE != 'arm64'
+        run: |
+          # Ubuntu 24.04 beta has already been released as a GitHub Runner image and provides Incus.
+          # However, there is an issue with the combination of Docker, arm64 image and libc-bin on it.
+          # After this issue is resolved, we will use the Ubuntu 24.04 runner image and install Incus using apt.
+          # https://github.com/pgroonga/pgroonga/issues/507#issuecomment-2199634563
+          sudo curl -fsSL https://pkgs.zabbly.com/key.asc -o /etc/apt/keyrings/zabbly.asc
+          cat <<SOURCES | sudo tee /etc/apt/sources.list.d/zabbly-incus-stable.sources
+          Enabled: yes
+          Types: deb
+          URIs: https://pkgs.zabbly.com/incus/stable
+          Suites: $(. /etc/os-release && echo ${VERSION_CODENAME})
+          Components: main
+          Architectures: $(dpkg --print-architecture)
+          Signed-By: /etc/apt/keyrings/zabbly.asc
+          SOURCES
+
+          sudo apt update
+          sudo apt install -y -V incus
+      - name: Allow egress network traffic flows for Incus
+        if: |
+          env.ARCHITECTURE != 'arm64'
+        # https://linuxcontainers.org/incus/docs/main/howto/network_bridge_firewalld/#prevent-connectivity-issues-with-incus-and-docker
+        run: |
+          sudo iptables -I DOCKER-USER -i incusbr0 -j ACCEPT
+          sudo iptables -I DOCKER-USER -o incusbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+      - name: Prepare container
+        if: |
+          env.ARCHITECTURE != 'arm64'
+        run: |
+          set -x
+          sudo incus admin init --auto
+          sudo incus launch ${{ env.TEST_INCUS_IMAGE }} target
+          sudo incus config device add target host-rw disk source=$PWD path=/host-rw
+          sudo incus config device add target host disk source=$PWD path=/host readonly=true
+          # Ideally, we would use systemctl is-system-running --wait to ensure all services are fully operational.
+          # However, this option doesn't work in AlmaLinux 8 and results in an error.
+          # As a workaround, we introduced a 10-second sleep delay to allow network services time to stabilize,
+          # preventing DNS resolution errors when attempting to dnf install command.
+          # ref: https://discuss.linuxcontainers.org/t/network-issue-with-almalinux-8-9-on-github-actions-using-incus/20046
+          sleep 10
       - name: Test
         if: |
           env.ARCHITECTURE != 'arm64'
         run: |
-          docker run \
-            --rm \
-            --volume ${PWD}:/host:ro \
-            --volume ${PWD}:/host-rw:rw \
-            ${TEST_DOCKER_IMAGE} \
+          sudo incus exec target \
+            -- \
             /host/packages/${PACKAGE_TYPE}/test.sh
+      - name: Delete container
+        if: |
+          env.ARCHITECTURE != 'arm64'
+        run: |
+          sudo incus stop target
+          sudo incus delete target
 
       # Upload logs
       - uses: actions/upload-artifact@v4
