@@ -102,8 +102,6 @@ if lsof -Pi :5432 -sTCP:LISTEN -t >/dev/null; then
   else
     echo "postgresql.service not found."
   fi
-
-  sudo kill -INT $(lsof -Pi :5432 -sTCP:LISTEN -t) || echo "Failed to stop PostgreSQL processes on port 5432."
 else
   echo "No PostgreSQL processes running on port 5432."
 fi
