@@ -85,6 +85,22 @@ echo "::endgroup::"
 
 echo "::group::Prepare test"
 
+pgrep -l postgres || echo "No PostgreSQL processes found."
+if lsof -Pi :5432 -sTCP:LISTEN -t >/dev/null; then
+  echo "Stopping PostgreSQL processes on port 5432..."
+  lsof -Pi :5432 -sTCP:LISTEN
+
+  if systemctl list-units --full -all | grep -q postgresql.service; then
+    sudo systemctl stop postgresql || echo "Failed to stop postgresql.service."
+  else
+    echo "postgresql.service not found."
+  fi
+
+  sudo kill -INT $(lsof -Pi :5432 -sTCP:LISTEN -t) || echo "Failed to stop PostgreSQL processes on port 5432."
+else
+  echo "No PostgreSQL processes running on port 5432."
+fi
+
 data_dir=/tmp/data
 sudo systemctl stop postgresql
 sudo -u postgres -H \
