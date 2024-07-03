@@ -86,6 +86,7 @@ echo "::endgroup::"
 echo "::group::Prepare test"
 
 data_dir=/tmp/data
+sudo systemctl stop postgresql
 sudo -u postgres -H \
      $(pg_config --bindir)/initdb \
      --encoding=UTF-8 \
