@@ -1,0 +1,1 @@
+option('pgrn_debug', type: 'boolean', value: false, description: 'Enable PGroonga debug mode (PGRN_DEBUG=1 in Makefile)')
