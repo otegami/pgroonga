@@ -407,7 +407,6 @@ test('pgroonga-simple',
   args: [
     '--inputdir=' + meson.current_source_dir(),
     '--outputdir=' + meson.current_build_dir(),
-    '--expecteddir=' + meson.current_source_dir(),
     '--bindir=' + pg_bindir,
     '--dlpath=' + meson.current_build_dir(),
     '--load-extension=pgroonga',
