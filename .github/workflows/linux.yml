@@ -120,6 +120,9 @@ jobs:
         run: |
           # Install to /tmp/local/ to avoid conflicts with Make-based installation.
           meson install -C ../pgroonga.build --destdir=/tmp/local/
+      - name: Test PGroonga by Meson
+        run: |
+          meson test -C ../pgroonga.build
       - name: Run regression test
         run: |
           test/run-sql-test.sh

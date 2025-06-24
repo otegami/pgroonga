@@ -399,3 +399,25 @@ pgroonga_database_update_sqls = files(
 install_data(pgroonga_database_update_sqls,
   install_dir: pg_sharedir / 'extension',
 )
+
+pg_regress = pg_pkglibdir / 'pgxs/src/test/regress/pg_regress'
+run_command('mkdir', '-p', meson.current_build_dir() / 'results/column-name', check: true)
+test('pgroonga-simple',
+  find_program(pg_regress),
+  args: [
+    '--inputdir=' + meson.current_source_dir(),
+    '--outputdir=' + meson.current_build_dir(),
+    '--expecteddir=' + meson.current_source_dir(),
+    '--bindir=' + pg_bindir,
+    '--dlpath=' + meson.current_build_dir(),
+    '--load-extension=pgroonga',
+    'column-name/japanese',
+  ],
+  workdir: meson.current_source_dir(),
+  depends: [pgroonga],
+  suite: 'regression',
+  timeout: 300,
+  env: {
+    'PG_REGRESS_DIFF_OPTS': '-u --color=always',
+  },
+)
