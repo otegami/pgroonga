@@ -6,9 +6,26 @@ project(
 
 required_groonga_version = '14.0.0'
 
-groonga = dependency('groonga', version: '>= ' + required_groonga_version)
 cc = meson.get_compiler('c')
-libm = cc.find_library('m')
+if host_machine.system() == 'windows'
+  cmake = import('cmake')
+  cmake_opts = cmake.subproject_options()
+  cmake_opts.add_cmake_defines({
+    'CMAKE_BUILD_TYPE': 'RelWithDebInfo',
+    'GRN_WITH_LZ4': 'bundled',
+    'GRN_WITH_MECAB': 'bundled',
+    'GRN_WITH_MESSAGE_PACK': 'bundled',
+    'GRN_WITH_MRUBY': 'yes',
+    'GRN_WITH_RAPIDJSON': 'bundled',
+    'GRN_WITH_ZSTD': 'bundled',
+  })
+  groonga_proj = cmake.subproject('groonga', options: cmake_opts)
+  groonga = groonga_proj.dependency('groonga')
+  libm = []
+else
+  groonga = dependency('groonga', version: '>= ' + required_groonga_version)
+  libm = cc.find_library('m')
+endif
 
 pg_config_path = get_option('pg_config')
 if pg_config_path == ''
@@ -52,24 +69,33 @@ postgresql = declare_dependency(
 
 pgrn_dependencies = [postgresql, groonga, libm]
 
-msgpack = dependency('msgpack-c', 'msgpack', required: get_option('message_pack'))
-if msgpack.found()
-  pgrn_msgpack = declare_dependency(
-    compile_args: ['-DPGRN_HAVE_MSGPACK'],
-    dependencies: [msgpack]
-  )
-  pgrn_dependencies += pgrn_msgpack
-endif
+# Handle optional dependencies
+if host_machine.system() == 'windows'
+  # On Windows, Groonga CMake handles all bundled dependencies
+  # MessagePack and XXHash are built into Groonga when bundled
+  # No additional dependency handling needed
+else
+  msgpack = dependency('msgpack-c', 'msgpack', required: get_option('message_pack'))
+  if msgpack.found()
+    pgrn_msgpack = declare_dependency(
+      compile_args: ['-DPGRN_HAVE_MSGPACK'],
+      dependencies: [msgpack]
+    )
+    pgrn_dependencies += pgrn_msgpack
+  endif
 
-xxhash = dependency('libxxhash', required: get_option('xxhash'))
-if xxhash.found()
-  pgrn_dependencies += xxhash
+  xxhash = dependency('libxxhash', required: get_option('xxhash'))
+  if xxhash.found()
+    pgrn_dependencies += xxhash
+  endif
 endif
 
 name_suffix = 'so'
 if host_machine.system() == 'darwin' and \
    pg_config.version().version_compare('>= 16')
   name_suffix = 'dylib'
+elif host_machine.system() == 'windows'
+  name_suffix = 'dll'
 endif
 
 pgrn_module_args = {

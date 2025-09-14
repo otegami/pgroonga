@@ -78,8 +78,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ccache
-          key: windows-msvc-${{ env.ARTIFACT_ID }}-ccache-${{ hashFiles('src/**') }}
-          restore-keys: cmake-windows-msvc-${{ env.ARTIFACT_ID }}-ccache-
+          key: meson-windows-msvc-${{ env.ARTIFACT_ID }}-ccache-${{ hashFiles('src/**') }}
+          restore-keys: meson-windows-msvc-${{ env.ARTIFACT_ID }}-ccache-
       - name: Prepare ccache
         run: |
           choco install ccache
@@ -118,43 +118,40 @@ jobs:
             rm groonga-latest.zip
             mv groonga-* vendor\groonga
           }
-      - name: Run CMake
+      - name: Install Meson
+        run: |
+          choco install meson
+      - name: Setup Meson subprojects for Groonga
+        run: |
+          mkdir -p subprojects
+          cmd /c mklink /j subprojects\groonga vendor\groonga
+      - name: Setup Meson
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
-          cmake ^
-            -B ..\build ^
-            -G Ninja ^
-            -S . ^
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
-            -DCMAKE_INSTALL_PREFIX="..\pgsql" ^
-            -DGRN_WITH_LZ4=bundled ^
-            -DGRN_WITH_MECAB=bundled ^
-            -DGRN_WITH_MESSAGE_PACK=bundled ^
-            -DGRN_WITH_MRUBY=yes ^
-            -DGRN_WITH_RAPIDJSON=bundled ^
-            -DGRN_WITH_ZSTD=bundled ^
-            -DPGRN_POSTGRESQL_VERSION_MAJOR=${{ matrix.postgresql-version-major }}
+          meson setup ..\pgroonga.build --prefix="..\pgsql"
       - name: Build
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
-          cmake --build ..\build
+          meson compile -C ..\pgroonga.build
       - name: Install
+        shell: cmd
         run: |
-          cmake --install ..\build
+          call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          meson install -C ..\pgroonga.build
 
       # Upload artifacts
       - name: Package
+        shell: cmd
         run: |
-          New-Item artifacts -ItemType Directory
-          cmake `
-            --build ..\build `
-            --target package `
-            --verbose
-          Copy-Item -Path ..\build\*.zip -Destination artifacts
-          Write-Output "ARTIFACT_BASENAME=$((Get-Item artifacts\*.zip).name)" | `
-            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          mkdir artifacts
+          cd ..\pgroonga.build
+          meson dist --formats=zip
+          copy meson-dist\*.zip ..\pgroonga\artifacts\
+          cd ..\pgroonga
+          for /f %%i in ('dir /b artifacts\*.zip') do echo ARTIFACT_BASENAME=%%i>> %GITHUB_ENV%
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_ID }}
