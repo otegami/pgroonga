@@ -121,6 +121,8 @@ jobs:
       - name: Install Meson
         run: |
           choco install meson
+          $env:PATH = "C:\ProgramData\chocolatey\bin;$env:PATH"
+          Write-Output "MESON_PATH=C:\ProgramData\chocolatey\bin" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Setup Meson subprojects for Groonga
         run: |
           mkdir -p subprojects
@@ -128,16 +130,19 @@ jobs:
       - name: Setup Meson
         shell: cmd
         run: |
+          set "PATH=%MESON_PATH%;%PATH%"
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
           meson setup ..\pgroonga.build --prefix="..\pgsql"
       - name: Build
         shell: cmd
         run: |
+          set "PATH=%MESON_PATH%;%PATH%"
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
           meson compile -C ..\pgroonga.build
       - name: Install
         shell: cmd
         run: |
+          set "PATH=%MESON_PATH%;%PATH%"
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
           meson install -C ..\pgroonga.build
 
@@ -145,6 +150,7 @@ jobs:
       - name: Package
         shell: cmd
         run: |
+          set "PATH=%MESON_PATH%;%PATH%"
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
           mkdir artifacts
           cd ..\pgroonga.build
