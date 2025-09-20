@@ -120,6 +120,25 @@ jobs:
             rm groonga-latest.zip
             mv groonga-* vendor\groonga
           }
+      - name: Build Groonga
+        shell: cmd
+        run: |
+          call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          cd vendor/groonga
+          cmake ^
+            -B ..\groonga.build ^
+            -G Ninja ^
+            -S . ^
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
+            -DCMAKE_INSTALL_PREFIX="..\groonga.install" ^
+            -DGRN_WITH_BUNDLED_LIBS=OFF ^
+            -DGRN_WITH_LZ4=bundled ^
+            -DGRN_WITH_MECAB=bundled ^
+            -DGRN_WITH_MESSAGE_PACK=bundled ^
+            -DGRN_WITH_RAPIDJSON=bundled ^
+            -DGRN_WITH_XXHASH=bundled
+          cmake --build ..\groonga.build
+          cmake --install ..\groonga.build
       - name: Run CMake
         shell: cmd
         run: |
