@@ -6,14 +6,12 @@ project(
 
 required_groonga_version = '14.1.0'
 
-groonga = dependency('groonga', version: '>= ' + required_groonga_version)
 cc = meson.get_compiler('c')
+
+groonga = dependency('groonga', version: '>= ' + required_groonga_version)
 libm = cc.find_library('m')
 
 pg_config_path = get_option('pg_config')
-if pg_config_path == ''
-  pg_config_path = 'pg_config'
-endif
 pg_config = find_program(pg_config_path)
 pg_includedir_server = run_command(
   pg_config, '--includedir-server', check: true
@@ -74,8 +72,10 @@ if xxhash.found()
 endif
 
 name_suffix = 'so'
-if host_machine.system() == 'darwin' and \
-   pg_config.version().version_compare('>= 16')
+if host_machine.system() == 'windows'
+  name_suffix = 'dll'
+elif host_machine.system() == 'darwin' and \
+     pg_config.version().version_compare('>= 16')
   name_suffix = 'dylib'
 endif
 

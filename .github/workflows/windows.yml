@@ -139,41 +139,38 @@ jobs:
             -DGRN_WITH_XXHASH=bundled
           cmake --build ..\groonga.build
           cmake --install ..\groonga.build
-      - name: Run CMake
+      - name: Install Meson
+        run: |
+          choco install meson
+          $env:PATH += ";C:\Program Files\Meson"
+          echo "PATH=$env:PATH" | `
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Get-Command meson
+          (Get-Command meson).Source
+          meson --version
+      - name: Configure PGroonga
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
-          cmake ^
-            -B ..\build ^
-            -G Ninja ^
-            -S . ^
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
-            -DCMAKE_INSTALL_PREFIX="..\pgsql" ^
-            -DGRN_WITH_LZ4=bundled ^
-            -DGRN_WITH_MECAB=bundled ^
-            -DGRN_WITH_MESSAGE_PACK=bundled ^
-            -DGRN_WITH_MRUBY=yes ^
-            -DGRN_WITH_RAPIDJSON=bundled ^
-            -DGRN_WITH_ZSTD=bundled ^
-            -DPGRN_POSTGRESQL_VERSION_MAJOR=${{ matrix.postgresql-version-major }}
-      - name: Build
+          meson setup ^
+            ..\pgroonga.build ^
+            --prefix="..\pgsql"
+      - name: Build PGroonga
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
-          cmake --build ..\build
-      - name: Install
+          meson compile -C ..\pgroonga.build
+      - name: Install PGroonga
+        shell: cmd
         run: |
-          cmake --install ..\build
+          call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          meson install -C ..\pgroonga.build
 
       # Upload artifacts
       - name: Package
         run: |
           New-Item artifacts -ItemType Directory
-          cmake `
-            --build ..\build `
-            --target package `
-            --verbose
-          Copy-Item -Path ..\build\*.zip -Destination artifacts
+          Compress-Archive -Path ..\pgsql\* -DestinationPath artifacts\pgroonga-${{ matrix.postgresql-version-major }}-windows-x64.zip
           Write-Output "ARTIFACT_BASENAME=$((Get-Item artifacts\*.zip).name)" | `
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - uses: actions/upload-artifact@v4
