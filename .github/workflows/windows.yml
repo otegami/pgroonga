@@ -91,12 +91,16 @@ jobs:
       - name: Download PostgreSQL
         run: |
           cd ..
+          Write-Output "Current directory after cd ..: $(Get-Location)"
           $POSTGRESQL_ARCHIVE_NAME = `
             "postgresql-${{ matrix.postgresql-version }}-windows-x64-binaries.zip"
           Invoke-WebRequest `
             "https://get.enterprisedb.com/postgresql/$POSTGRESQL_ARCHIVE_NAME" `
             -OutFile $POSTGRESQL_ARCHIVE_NAME
           Expand-Archive -Path $POSTGRESQL_ARCHIVE_NAME -DestinationPath .
+          Write-Output "PostgreSQL extracted to: $(Get-Location)\pgsql"
+          Write-Output "Files in parent directory:"
+          Get-ChildItem -Path . | Select-Object Name
       - name: Download Groonga
         run: |
           if ("${{ matrix.groonga-main }}" -eq "yes") {
@@ -152,9 +156,13 @@ jobs:
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          echo Current directory: %CD%
+          echo Parent directory: %CD%\..
+          for %%I in (%CD%\..) do set "PARENT_DIR=%%~fI"
+          echo Absolute parent directory: %PARENT_DIR%
           meson setup ^
             ..\pgroonga.build ^
-            --prefix="..\pgsql"
+            --prefix="%PARENT_DIR%\pgsql"
       - name: Build PGroonga
         shell: cmd
         run: |
