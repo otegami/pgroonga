@@ -160,14 +160,7 @@ jobs:
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
-          echo Current directory: %CD%
-          echo Parent directory: %CD%\..
-          for %%I in (%CD%\..) do set "PARENT_DIR=%%~fI"
-          echo Absolute parent directory: %PARENT_DIR%
-          set PKG_CONFIG_PATH=%CD%\vendor\groonga.install\lib\pkgconfig
-          echo PKG_CONFIG_PATH: %PKG_CONFIG_PATH%
-          pkg-config --list-all | findstr groonga
-          pkg-config --modversion groonga
+          set PKG_CONFIG_PATH=.\vendor\groonga.install\lib\pkgconfig
           meson setup ^
             ..\pgroonga.build ^
             --prefix="%PARENT_DIR%\pgsql"
