@@ -81,7 +81,7 @@ jobs:
         with:
           path: ccache
           key: windows-msvc-${{ env.ARTIFACT_ID }}-ccache-${{ hashFiles('src/**') }}
-          restore-keys: cmake-windows-msvc-${{ env.ARTIFACT_ID }}-ccache-
+          restore-keys: windows-msvc-${{ env.ARTIFACT_ID }}-ccache-
       - name: Prepare ccache
         run: |
           choco install ccache
