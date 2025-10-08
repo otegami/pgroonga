@@ -160,10 +160,12 @@ jobs:
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          for %%I in (%CD%\..) do set "PARENT_DIR=%%~fI"
           set PKG_CONFIG_PATH=.\vendor\groonga.install\lib\pkgconfig
           meson setup ^
             ..\pgroonga.build ^
-            --prefix="%PARENT_DIR%\pgsql"
+            --prefix="%PARENT_DIR%\pgsql" ^
+            -Dpg_config="%PARENT_DIR%\pgsql\bin\pg_config.exe"
       - name: Build PGroonga
         shell: cmd
         run: |
