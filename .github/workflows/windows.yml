@@ -143,10 +143,11 @@ jobs:
             -DGRN_WITH_XXHASH=bundled
           cmake --build ..\groonga.build
           cmake --install ..\groonga.build
-          cd -
-          $GROONGA_PATH = "$(Get-Location)\vendor\groonga.install"
-          Write-Output "Adding Groonga bin to PATH: $GROONGA_PATH"
-          $env:PATH = "$GROONGA_PATH;$env:PATH"
+      - name: Add Groonga to PATH
+        run: |
+          $GROONGA_BIN = "$(Get-Location)\vendor\groonga.install\bin"
+          Write-Output "Adding Groonga bin to PATH: $GROONGA_BIN"
+          $env:PATH = "$GROONGA_BIN;$env:PATH"
           echo "PATH=$env:PATH" | `
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Install Build Tools
