@@ -431,7 +431,10 @@ if get_option('test')
   ruby = find_program('ruby')
   pg_regress = find_program(
     'pg_regress',
-    dirs: [pg_pkglibdir / 'pgxs/src/test/regress']
+    dirs: [
+      pg_pkglibdir / 'pgxs/src/test/regress',
+      pg_bindir,
+    ]
   )
 
   schedule = meson.current_build_dir() / 'schedule'

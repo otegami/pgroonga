@@ -161,7 +161,11 @@ jobs:
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
           for %%I in (%CD%\..) do set "PARENT_DIR=%%~fI"
+          echo Absolute parent directory: %PARENT_DIR%
           set PKG_CONFIG_PATH=.\vendor\groonga.install\lib\pkgconfig
+          echo PKG_CONFIG_PATH: %PKG_CONFIG_PATH%
+          echo Searching for pg_regress...
+          dir /s /b "%PARENT_DIR%\pgsql\*pg_regress*"
           meson setup ^
             ..\pgroonga.build ^
             --prefix="%PARENT_DIR%\pgsql" ^
