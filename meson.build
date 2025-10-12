@@ -439,20 +439,21 @@ if get_option('test')
     ]
   )
 
-  schedule = meson.current_build_dir() / 'schedule'
   prepare_test = custom_target(
     'prepare',
     output: 'schedule',
     command: [
       ruby,
       meson.current_source_dir() / 'test' / 'prepare.rb',
-      schedule
+      '@OUTPUT@'
     ],
     env: {
       'BUILD_DIR': meson.current_build_dir(),
     },
     build_always_stale: true
   )
+
+  schedule = prepare_test.full_path()
 
   message('DEBUG: About to register test')
   if host_machine.system() == 'windows'
