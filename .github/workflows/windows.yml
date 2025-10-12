@@ -174,7 +174,6 @@ jobs:
           echo Searching for pg_regress...
           dir /s /b "%PARENT_DIR%\pgsql\*pg_regress*"
           meson setup ^
-            --wipe ^
             ..\pgroonga.build ^
             --prefix="%PARENT_DIR%\pgsql" ^
             -Dpg_config="%PARENT_DIR%\pgsql\bin\pg_config.exe"
