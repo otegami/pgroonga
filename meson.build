@@ -454,6 +454,7 @@ if get_option('test')
     build_always_stale: true
   )
 
+  message('DEBUG: About to register test')
   test('regression',
     pg_regress,
     args: [
@@ -482,4 +483,5 @@ if get_option('test')
     suite: 'regression',
     workdir: meson.current_source_dir(),
   )
+  message('DEBUG: Test registered successfully')
 endif
