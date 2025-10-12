@@ -427,6 +427,8 @@ install_data(maintainer_scripts,
   install_mode: 'rwxr-xr-x',
 )
 
+message('DEBUG: test option value = @0@'.format(get_option('test')))
+message('DEBUG: test option type = @0@'.format(get_option('test').to_string()))
 if get_option('test')
   ruby = find_program('ruby')
   pg_regress = find_program(
