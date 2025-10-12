@@ -455,6 +455,11 @@ if get_option('test')
   )
 
   message('DEBUG: About to register test')
+  if host_machine.system() == 'windows'
+    launcher = meson.current_source_dir() / 'test' / 'short-pgappname.bat'
+  else
+    launcher = meson.current_source_dir() / 'test' / 'short-pgappname'
+  endif
   test('regression',
     pg_regress,
     args: [
@@ -462,7 +467,7 @@ if get_option('test')
       '--dlpath', meson.current_build_dir(),
       '--inputdir', meson.current_source_dir(),
       '--outputdir', meson.current_build_dir(),
-      '--launcher', meson.current_source_dir() / 'test' / 'short-pgappname',
+      '--launcher', launcher,
       '--load-extension', meson.project_name(),
       '--schedule', schedule
     ],
