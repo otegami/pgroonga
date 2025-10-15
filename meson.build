@@ -138,10 +138,12 @@ pgroonga_sources = files(
   'src/pgroonga.c',
 )
 
+message('DEBUG: About to create pgroonga shared_module')
 pgroonga = shared_module('pgroonga',
   pgroonga_sources,
   kwargs: pgrn_module_args,
 )
+message('DEBUG: Created pgroonga shared_module')
 
 pgroonga_check_sources = files(
   'src/pgroonga-check.c',
@@ -196,6 +198,8 @@ pgroonga_wal_resource_manager = shared_module('pgroonga_wal_resource_manager',
   pgroonga_wal_resource_manager_sources,
   kwargs: pgrn_module_args,
 )
+
+message('DEBUG: All 7 shared modules created successfully')
 
 install_data('pgroonga.control',
   install_dir: pg_sharedir / 'extension',
