@@ -183,6 +183,19 @@ jobs:
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
           meson compile -C ..\pgroonga.build
+          meson introspect ..\pgroonga.build --targets
+      - name: Build PGroonga with specifed modules
+        shell: cmd
+        run: |
+          call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          meson compile -C ..\pgroonga.build ^
+            pgroonga ^
+            pgroonga_check ^
+            pgroonga_database ^
+            pgroonga_wal_applier ^
+            pgroonga_crash_safer ^
+            pgroonga_standby_maintainer ^
+            pgroonga_wal_resource_manager
       - name: Install PGroonga
         shell: cmd
         run: |
