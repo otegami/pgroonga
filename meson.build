@@ -15,6 +15,9 @@ pg_config = find_program(pg_config_path)
 pg_includedir_server = run_command(
   pg_config, '--includedir-server', check: true
 ).stdout().strip()
+pg_includedir = run_command(
+  pg_config, '--includedir', check: true
+).stdout().strip()
 pg_pkglibdir = run_command(
   pg_config, '--pkglibdir', check: true
 ).stdout().strip()
@@ -45,11 +48,18 @@ else
   pg_cflags_sl = run_command(pg_config, '--cflags_sl', check: true).stdout().strip().split()
 endif
 
+pg_include_dirs = [
+  include_directories(pg_includedir_server, is_system: true),
+]
+if host_machine.system() == 'windows'
+  pg_include_dirs += [
+    include_directories(pg_includedir, is_system: true),
+  ]
+endif
+
 postgresql = declare_dependency(
   compile_args: pg_cppflags + pg_cflags_sl,
-  include_directories: [
-    include_directories(pg_includedir_server, is_system: true),
-  ],
+  include_directories: pg_include_dirs,
 )
 
 pgrn_dependencies = [postgresql, groonga]
