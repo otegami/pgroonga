@@ -163,6 +163,11 @@ jobs:
           Get-Command pkg-config
           (Get-Command pkg-config).Source
           pkg-config --version
+      - name: Install dependecies
+        shell: cmd
+        run: |
+          call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          vcpkg install msgpack-c:x64-windows
       - name: Configure PGroonga
         shell: cmd
         run: |
