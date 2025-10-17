@@ -246,7 +246,7 @@ jobs:
         # TODO: Remove "matrix.postgresql-version-major == '18' ||" when we're PostgreSQL 18 on Windows ready
         if: matrix.postgresql-version-major == '18' || failure()
         run: |
-          Get-Content regression.diffs
+          Get-Content ..\pgroonga.build\regression.diffs
       - uses: actions/checkout@v5
         with:
           repository: pgroonga/benchmark
