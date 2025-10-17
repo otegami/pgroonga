@@ -48,10 +48,20 @@ else
   pg_cflags_sl = run_command(pg_config, '--cflags_sl', check: true).stdout().strip().split()
 endif
 
-pg_include_dirs = [
+pg_include_dirs = []
+if host_machine.system() == 'windows'
+  # Windows needs port-specific includes first for platform headers
+  # These provide Windows implementations of Unix headers (netdb.h, etc.)
+  pg_include_dirs += [
+    include_directories(pg_includedir_server / 'port' / 'win32_msvc', is_system: true),
+    include_directories(pg_includedir_server / 'port' / 'win32', is_system: true),
+  ]
+endif
+pg_include_dirs += [
   include_directories(pg_includedir_server, is_system: true),
 ]
 if host_machine.system() == 'windows'
+  # General PostgreSQL headers (for libintl.h, etc.)
   pg_include_dirs += [
     include_directories(pg_includedir, is_system: true),
   ]
