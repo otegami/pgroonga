@@ -171,12 +171,10 @@ pgroonga_sources = files(
   'src/pgroonga.c',
 )
 
-message('DEBUG: About to create pgroonga shared_module')
 pgroonga = shared_module('pgroonga',
   pgroonga_sources,
   kwargs: pgrn_module_args,
 )
-message('DEBUG: Created pgroonga shared_module')
 
 pgroonga_check_sources = files(
   'src/pgroonga-check.c',
@@ -231,8 +229,6 @@ pgroonga_wal_resource_manager = shared_module('pgroonga_wal_resource_manager',
   pgroonga_wal_resource_manager_sources,
   kwargs: pgrn_module_args,
 )
-
-message('DEBUG: All 7 shared modules created successfully')
 
 install_data('pgroonga.control',
   install_dir: pg_sharedir / 'extension',
@@ -464,8 +460,6 @@ install_data(maintainer_scripts,
   install_mode: 'rwxr-xr-x',
 )
 
-message('DEBUG: test option value = @0@'.format(get_option('test')))
-message('DEBUG: test option type = @0@'.format(get_option('test').to_string()))
 if get_option('test')
   ruby = find_program('ruby')
   pg_regress = find_program(
@@ -492,7 +486,6 @@ if get_option('test')
 
   schedule = prepare_test.full_path()
 
-  message('DEBUG: About to register test')
   if host_machine.system() == 'windows'
     launcher = meson.current_source_dir() / 'test' / 'short-pgappname.bat'
   else
@@ -526,5 +519,4 @@ if get_option('test')
     suite: 'regression',
     workdir: meson.current_source_dir(),
   )
-  message('DEBUG: Test registered successfully')
 endif
