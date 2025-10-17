@@ -73,7 +73,13 @@ postgresql = declare_dependency(
 )
 
 pgrn_dependencies = [postgresql, groonga]
-if host_machine.system() != 'windows'
+if host_machine.system() == 'windows'
+  # On Windows, extensions must explicitly link against postgres.lib
+  # to access PostgreSQL server functions
+  postgres_lib = cc.find_library('postgres', dirs: [pg_pkglibdir])
+  pgrn_dependencies += postgres_lib
+else
+  # On Unix/Linux, link against libm (math library)
   libm = cc.find_library('m')
   pgrn_dependencies += libm
 endif
