@@ -100,7 +100,10 @@ if msgpack.found()
   pgrn_dependencies += pgrn_msgpack
 endif
 
-xxhash = dependency('libxxhash', required: get_option('xxhash'))
+# xxhash dependency - try system library first, fall back to WrapDB subproject
+xxhash = dependency('libxxhash',
+  required: get_option('xxhash'),
+  fallback: ['xxhash', 'xxhash_dep'])
 if xxhash.found()
   pgrn_dependencies += xxhash
 endif
