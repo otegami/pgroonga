@@ -235,6 +235,7 @@ jobs:
         shell: cmd
         run: |
           call "%VC_PREFIX%\Auxiliary\Build\vcvars64.bat"
+          set PGUSER=%PGROONGA_TEST_USER%
           meson test -C ..\pgroonga.build -v
       - name: Shutdown PostgreSQL for test
         if: always()
