@@ -462,12 +462,23 @@ install_data(maintainer_scripts,
 
 if get_option('test')
   ruby = find_program('ruby')
-  pg_regress = find_program(
-    'pg_regress',
-    dirs: [
+  # For PostgreSQL 17+ on Windows, pg_regress.exe in pgxs depends on libpq.dll
+  # which is in the bin directory. We copy pg_regress.exe to bin in CI,
+  # so search bin directory first for PostgreSQL 17+ on Windows only.
+  if host_machine.system() == 'windows' and pg_config.version().version_compare('>= 17')
+    pg_regress_search_dirs = [
+      pg_bindir,
+      pg_pkglibdir / 'pgxs/src/test/regress',
+    ]
+  else
+    pg_regress_search_dirs = [
       pg_pkglibdir / 'pgxs/src/test/regress',
       pg_bindir,
     ]
+  endif
+  pg_regress = find_program(
+    'pg_regress',
+    dirs: pg_regress_search_dirs
   )
 
   prepare_test = custom_target(
