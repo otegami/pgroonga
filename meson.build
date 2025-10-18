@@ -85,7 +85,12 @@ else
 endif
 
 if meson.version().version_compare('>= 0.60.0')
-  msgpack = dependency('msgpack-c', 'msgpack', required: get_option('message_pack'))
+  # On Windows, msgpack-c from vcpkg provides CMake config but not pkg-config
+  if host_machine.system() == 'windows'
+    msgpack = dependency('msgpack-c', method: 'cmake', required: get_option('message_pack'))
+  else
+    msgpack = dependency('msgpack-c', 'msgpack', required: get_option('message_pack'))
+  endif
 else
   # We assume that users on environments that use old Meson use old
   # MessagePack. We don't check 'msgpack-c' here because we don't want
