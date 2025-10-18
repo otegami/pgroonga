@@ -178,6 +178,16 @@ jobs:
           # Add to PKG_CONFIG_PATH for subsequent steps
           Write-Output "PKG_CONFIG_PATH=$MSGPACK_PC_DIR" | `
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Prepare pg_regress for PostgreSQL 17+
+        if: ${{ matrix.postgresql-version-major >= 17 }}
+        run: |
+          # pg_regress.exe depends on libpq.dll and libpq.dll exists
+          # in pgsql\bin\. We need to set PATH or use same directory
+          # to resolve the dependency. We use the same directory approach.
+          # This must run BEFORE meson setup so find_program() finds the working copy.
+          Copy-Item `
+            -Path ..\pgsql\lib\pgxs\src\test\regress\pg_regress.exe `
+            -Destination ..\pgsql\bin\
       - name: Configure PGroonga
         shell: cmd
         run: |
@@ -246,15 +256,6 @@ jobs:
               -Append
           ..\pgsql\bin\pg_ctl start `
             --pgdata=${Env:PGROONGA_TEST_DATA}
-      - name: Prepare pg_regress for PostgreSQL 17+
-        if: ${{ matrix.postgresql-version-major >= 17 }}
-        run: |
-          # pg_regress.exe depends on libpq.dll and libpq.dll exists
-          # in pgsql\bin\. We need to set PATH or use same directory
-          # to resolve the dependency. We use the same directory approach.
-          Copy-Item `
-            -Path ..\pgsql\lib\pgxs\src\test\regress\pg_regress.exe `
-            -Destination ..\pgsql\bin\
       - name: Prepare test files
         run: |
           # TODO: Remove me when Groonga bundles libstemmer
