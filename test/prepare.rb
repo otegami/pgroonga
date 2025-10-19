@@ -18,7 +18,6 @@ open_output(ARGV[0]) do |output|
   source_dir = File.dirname(File.dirname(__FILE__))
   sql_dir_path = Pathname.new(File.join(source_dir, "sql"))
 
-  test_count = 0
   Find.find(sql_dir_path) do |entry|
     entry_path = Pathname.new(entry)
     relative_path = entry_path.relative_path_from(sql_dir_path)
@@ -34,7 +33,6 @@ open_output(ARGV[0]) do |output|
       next unless entry.end_with?(".sql")
       test_file = relative_path.sub_ext("")
       output.puts("test: #{test_file}")
-      test_count += 1
     end
   end
 end

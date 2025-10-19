@@ -6,11 +6,13 @@ project(
 
 required_groonga_version = '14.1.0'
 
+groonga = dependency('groonga', version: '>= ' + required_groonga_version)
 cc = meson.get_compiler('c')
 
-groonga = dependency('groonga', version: '>= ' + required_groonga_version)
-
 pg_config_path = get_option('pg_config')
+if pg_config_path == ''
+  pg_config_path = 'pg_config'
+endif
 pg_config = find_program(pg_config_path)
 pg_includedir_server = run_command(
   pg_config, '--includedir-server', check: true
@@ -55,17 +57,12 @@ if host_machine.system() == 'windows'
   pg_include_dirs += [
     include_directories(pg_includedir_server / 'port' / 'win32_msvc', is_system: true),
     include_directories(pg_includedir_server / 'port' / 'win32', is_system: true),
+    include_directories(pg_includedir, is_system: true),
   ]
 endif
 pg_include_dirs += [
   include_directories(pg_includedir_server, is_system: true),
 ]
-if host_machine.system() == 'windows'
-  # General PostgreSQL headers (for libintl.h, etc.)
-  pg_include_dirs += [
-    include_directories(pg_includedir, is_system: true),
-  ]
-endif
 
 postgresql = declare_dependency(
   compile_args: pg_cppflags + pg_cflags_sl,
@@ -76,8 +73,8 @@ pgrn_dependencies = [postgresql, groonga]
 if host_machine.system() == 'windows'
   # On Windows, extensions must explicitly link against postgres.lib
   # to access PostgreSQL server functions
-  postgres_lib = cc.find_library('postgres', dirs: [pg_pkglibdir])
-  pgrn_dependencies += postgres_lib
+  postgresql_lib = cc.find_library('postgres', dirs: [pg_pkglibdir])
+  pgrn_dependencies += postgresql_lib
 else
   # On Unix/Linux, link against libm (math library)
   libm = cc.find_library('m')
@@ -86,11 +83,8 @@ endif
 
 if meson.version().version_compare('>= 0.60.0')
   # On Windows, msgpack-c from vcpkg provides CMake config but not pkg-config
-  if host_machine.system() == 'windows'
-    msgpack = dependency('msgpack-c', method: 'cmake', required: get_option('message_pack'))
-  else
-    msgpack = dependency('msgpack-c', 'msgpack', required: get_option('message_pack'))
-  endif
+  pkg_tool = host_machine.system() == 'windows' ? 'cmake' : 'pkg-config'
+  msgpack = dependency('msgpack-c', 'msgpack', method: pkg_tool, required: get_option('message_pack'))
 else
   # We assume that users on environments that use old Meson use old
   # MessagePack. We don't check 'msgpack-c' here because we don't want
@@ -105,7 +99,6 @@ if msgpack.found()
   pgrn_dependencies += pgrn_msgpack
 endif
 
-# xxhash dependency - try system library first, fall back to WrapDB subproject
 xxhash = dependency('libxxhash',
   required: get_option('xxhash'),
   fallback: ['xxhash', 'xxhash_dep'])
@@ -471,19 +464,19 @@ if get_option('test')
   # which is in the bin directory. We copy pg_regress.exe to bin in CI,
   # so search bin directory first for PostgreSQL 17+ on Windows only.
   if host_machine.system() == 'windows' and pg_config.version().version_compare('>= 17')
-    pg_regress_search_dirs = [
+    pg_regress_dirs = [
       pg_bindir,
       pg_pkglibdir / 'pgxs/src/test/regress',
     ]
   else
-    pg_regress_search_dirs = [
+    pg_regress_dirs = [
       pg_pkglibdir / 'pgxs/src/test/regress',
       pg_bindir,
     ]
   endif
   pg_regress = find_program(
     'pg_regress',
-    dirs: pg_regress_search_dirs
+    dirs: pg_regress_dirs
   )
 
   prepare_test = custom_target(
