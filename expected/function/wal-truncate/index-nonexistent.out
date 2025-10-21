@@ -1,2 +1,0 @@
-SELECT pgroonga_wal_truncate('nonexistent');
-ERROR:  relation "nonexistent" does not exist

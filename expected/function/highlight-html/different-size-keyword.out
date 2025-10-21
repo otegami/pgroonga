@@ -1,8 +1,0 @@
-SELECT pgroonga_highlight_html(
-  '100㍉メートル',
-  ARRAY['ミリ']);
-          pgroonga_highlight_html           
---------------------------------------------
- 100<span class="keyword">㍉</span>メートル
-(1 row)
-

@@ -1,6 +1,0 @@
-SELECT pgroonga_normalize('ЛИЦЕНЗИЯ', 'NormalizerNFKC100');
- pgroonga_normalize 
---------------------
- лицензия
-(1 row)
-

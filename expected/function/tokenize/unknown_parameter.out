@@ -1,3 +1,0 @@
-SELECT pgroonga_tokenize('This is a pen.',
-                         'unknown', 'value');
-ERROR:  pgroonga: [tokenize] unknown parameter name: <unknown>

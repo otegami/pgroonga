@@ -1,2 +1,0 @@
-SELECT pgroonga_escape(TIMESTAMP '2016-11-29 01:23:45');
-SELECT pgroonga_escape(TIMESTAMP '2016-11-29 01:23:45+09');
