@@ -8,6 +8,9 @@ required_groonga_version = '14.1.0'
 
 groonga = dependency('groonga', version: '>= ' + required_groonga_version)
 cc = meson.get_compiler('c')
+if host_machine.system() == 'windows'
+  windows = import('windows')
+endif
 
 pg_config_path = get_option('pg_config')
 if pg_config_path == ''
@@ -31,10 +34,26 @@ pg_bindir = run_command(
 ).stdout().strip()
 pg_includedir_extension = pg_includedir_server / 'extension'
 
+pgrn_project_id = meson.project_name()
 pgrn_version = meson.project_version()
+
+pgrn_version_components = pgrn_version.split('.')
+pgrn_rc_config = {
+  'PGRN_VERSION_MAJOR': pgrn_version_components[0],
+  'PGRN_VERSION_MINOR': pgrn_version_components[1],
+  'PGRN_VERSION_MICRO': pgrn_version_components[2],
+  'PGRN_VERSION': pgrn_version,
+  'PGRN_VENDOR': 'The PGroonga Project',
+  'PGRN_DESCRIPTION': 'Super fast and all languages supported full text search index based on Groonga',
+  'PGRN_PROJECT_NAME': 'PGroonga',
+}
+
 pgrn_c_args = [f'-DPGRN_VERSION="@pgrn_version@"']
 if get_option('buildtype').startswith('debug')
   pgrn_c_args += ['-DPGROONGA_DEBUG=1']
+endif
+if host_machine.system() == 'windows'
+  pgrn_c_args += ['/EHsc']
 endif
 
 # Note: Meson's split() is NOT shell-compatible.
@@ -169,6 +188,16 @@ pgroonga_sources = files(
   'src/pgroonga.c',
 )
 
+if host_machine.system() == 'windows'
+  pgroonga_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga.rc.in',
+      output: 'pgroonga.rc',
+      configuration: pgrn_rc_config + {'PGRN_DLL_NAME': pgrn_project_id}
+    )
+  )
+endif
+
 pgroonga = shared_module('pgroonga',
   pgroonga_sources,
   kwargs: pgrn_module_args,
@@ -177,6 +206,16 @@ pgroonga = shared_module('pgroonga',
 pgroonga_check_sources = files(
   'src/pgroonga-check.c',
 )
+
+if host_machine.system() == 'windows'
+  pgroonga_check_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga-check.rc.in',
+      output: 'pgroonga-check.rc',
+      configuration: pgrn_rc_config + {'PGRN_CHECK_DLL_NAME': pgrn_project_id + '_check'}
+    )
+  )
+endif
 
 pgroonga_check = shared_module('pgroonga_check',
   pgroonga_check_sources,
@@ -187,6 +226,16 @@ pgroonga_database_sources = files(
   'src/pgroonga-database.c',
 )
 
+if host_machine.system() == 'windows'
+  pgroonga_database_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga-database.rc.in',
+      output: 'pgroonga-database.rc',
+      configuration: pgrn_rc_config + {'PGRN_DATABASE_DLL_NAME': pgrn_project_id + '_database'}
+    )
+  )
+endif
+
 pgroonga_database = shared_module('pgroonga_database',
   pgroonga_database_sources,
   kwargs: pgrn_module_args,
@@ -195,6 +244,16 @@ pgroonga_database = shared_module('pgroonga_database',
 pgroonga_wal_applier_sources = files(
   'src/pgroonga-wal-applier.c',
 )
+
+if host_machine.system() == 'windows'
+  pgroonga_wal_applier_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga-wal-applier.rc.in',
+      output: 'pgroonga-wal-applier.rc',
+      configuration: pgrn_rc_config + {'PGRN_WAL_APPLIER_DLL_NAME': pgrn_project_id + '_wal_applier'}
+    )
+  )
+endif
 
 pgroonga_wal_applier = shared_module('pgroonga_wal_applier',
   pgroonga_wal_applier_sources,
@@ -205,6 +264,16 @@ pgroonga_crash_safer_sources = files(
   'src/pgroonga-crash-safer.c',
 )
 
+if host_machine.system() == 'windows'
+  pgroonga_crash_safer_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga-crash-safer.rc.in',
+      output: 'pgroonga-crash-safer.rc',
+      configuration: pgrn_rc_config + {'PGRN_CRASH_SAFER_DLL_NAME': pgrn_project_id + '_crash_safer'}
+    )
+  )
+endif
+
 pgroonga_crash_safer = shared_module('pgroonga_crash_safer',
   pgroonga_crash_safer_sources,
   kwargs: pgrn_module_args,
@@ -214,6 +283,16 @@ pgroonga_standby_maintainer_sources = files(
   'src/pgroonga-standby-maintainer.c',
 )
 
+if host_machine.system() == 'windows'
+  pgroonga_standby_maintainer_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga-standby-maintainer.rc.in',
+      output: 'pgroonga-standby-maintainer.rc',
+      configuration: pgrn_rc_config + {'PGRN_STANDBY_MAINTAINER_DLL_NAME': pgrn_project_id + '_standby_maintainer'}
+    )
+  )
+endif
+
 pgroonga_standby_maintainer = shared_module('pgroonga_standby_maintainer',
   pgroonga_standby_maintainer_sources,
   kwargs: pgrn_module_args,
@@ -222,6 +301,16 @@ pgroonga_standby_maintainer = shared_module('pgroonga_standby_maintainer',
 pgroonga_wal_resource_manager_sources = files(
   'src/pgroonga-wal-resource-manager.c',
 )
+
+if host_machine.system() == 'windows'
+  pgroonga_wal_resource_manager_sources += windows.compile_resources(
+    configure_file(
+      input: 'src/pgroonga-wal-resource-manager.rc.in',
+      output: 'pgroonga-wal-resource-manager.rc',
+      configuration: pgrn_rc_config + {'PGRN_WAL_RESOURCE_MANAGER_DLL_NAME': pgrn_project_id + '_wal_resource_manager'}
+    )
+  )
+endif
 
 pgroonga_wal_resource_manager = shared_module('pgroonga_wal_resource_manager',
   pgroonga_wal_resource_manager_sources,
