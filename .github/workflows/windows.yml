@@ -130,12 +130,13 @@ jobs:
             -S vendor\groonga ^
             -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
             -DCMAKE_INSTALL_PREFIX="vendor\groonga.install" ^
-            -DGRN_WITH_BUNDLED_LIBS=OFF ^
             -DGRN_WITH_LZ4=bundled ^
             -DGRN_WITH_MECAB=bundled ^
             -DGRN_WITH_MESSAGE_PACK=bundled ^
+            -DGRN_WITH_MRUBY=yes ^
             -DGRN_WITH_RAPIDJSON=bundled ^
-            -DGRN_WITH_XXHASH=bundled
+            -DGRN_WITH_XXHASH=bundled ^
+            -DGRN_WITH_ZSTD=bundled
       - name: Build Groonga
         shell: cmd
         run: |
