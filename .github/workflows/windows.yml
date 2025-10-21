@@ -256,6 +256,30 @@ jobs:
         if: matrix.postgresql-version-major == '18' || failure()
         run: |
           Get-Content ..\pgroonga.build\regression.diffs
+      - name: Show pgroonga.log
+        if: failure()
+        run: |
+          if (Test-Path ${Env:PGROONGA_TEST_DATA}\pgroonga.log) {
+            Get-Content ${Env:PGROONGA_TEST_DATA}\pgroonga.log
+          } else {
+            Write-Output "pgroonga.log not found"
+          }
+      - name: Show pgroonga.log of parsed backtrace
+        if: failure()
+        run: |
+          if (Test-Path ${Env:PGROONGA_TEST_DATA}\pgroonga.log) {
+            Invoke-WebRequest `
+              -Uri "https://raw.githubusercontent.com/groonga/groonga/main/tools/parse-backtrace.rb" `
+              -OutFile parse-backtrace.rb
+            if ("${{ matrix.groonga-main }}" -eq "yes") {
+              ruby .\parse-backtrace.rb --use-installed-groonga ${Env:PGROONGA_TEST_DATA}\pgroonga.log
+            } else {
+              $groonga_version = (groonga --version | Select-String -Pattern '\d+\.\d+\.\d+').Matches.Value
+              ruby .\parse-backtrace.rb --version $groonga_version ${Env:PGROONGA_TEST_DATA}\pgroonga.log
+            }
+          } else {
+            Write-Output "pgroonga.log not found"
+          }
       - uses: actions/checkout@v5
         with:
           repository: pgroonga/benchmark
