@@ -1,0 +1,32 @@
+CREATE TABLE logs (
+  message jsonb
+);
+CREATE INDEX pgroonga_index ON logs USING PGroonga (message);
+SELECT pgroonga_table_name('pgroonga_index')
+\gset old_
+REINDEX INDEX pgroonga_index;
+SELECT pgroonga_command('object_exist',
+                        ARRAY[
+                          'name', :'old_pgroonga_table_name'
+                        ])::json->>1;
+ ?column? 
+----------
+ true
+(1 row)
+
+SELECT pgroonga_vacuum();
+ pgroonga_vacuum 
+-----------------
+ t
+(1 row)
+
+SELECT pgroonga_command('object_exist',
+                        ARRAY[
+                          'name', :'old_pgroonga_table_name'
+                        ])::json->>1;
+ ?column? 
+----------
+ false
+(1 row)
+
+DROP TABLE logs;

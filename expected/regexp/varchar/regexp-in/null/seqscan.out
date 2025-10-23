@@ -1,0 +1,26 @@
+CREATE TABLE memos (
+  content varchar(256)
+);
+INSERT INTO memos VALUES ('PostgreSQL is a RDBMS');
+SET enable_seqscan = on;
+SET enable_indexscan = off;
+SET enable_bitmapscan = off;
+EXPLAIN (COSTS OFF)
+SELECT *
+  FROM memos
+ WHERE content &~| NULL;
+        QUERY PLAN         
+---------------------------
+ Result
+   Replaces: Scan on memos
+   One-Time Filter: false
+(3 rows)
+
+SELECT *
+  FROM memos
+ WHERE content &~| NULL;
+ content 
+---------
+(0 rows)
+
+DROP TABLE memos;

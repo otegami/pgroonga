@@ -232,12 +232,12 @@ jobs:
             -Encoding utf8
           ..\pgsql\bin\pg_ctl start `
             --pgdata=${Env:PGROONGA_TEST_DATA}
-      # - name: Prepare test files
-      #   run: |
-      #     # TODO: Remove me when Groonga bundles libstemmer
-      #     Remove-Item sql\full-text-search\text\options\token-filters\custom.sql
-      #     # Reduce tests to reduce test time
-      #     Remove-Item sql\compatibility -Recurse -Force
+      - name: Prepare test files
+        run: |
+          # TODO: Remove me when Groonga bundles libstemmer
+          Remove-Item sql\full-text-search\text\options\token-filters\custom.sql
+          # Reduce tests to reduce test time
+          Remove-Item sql\compatibility -Recurse -Force
       - name: Run regression test
         # TODO: Remove this when we're PostgreSQL 18 on Windows ready
         continue-on-error: ${{ matrix.postgresql-version-major == '18' && true || false }}
@@ -257,6 +257,7 @@ jobs:
         run: |
           Get-Content ..\pgroonga.build\regression.diffs
       - name: Show pgroonga.log
+        if: failure()
         run: |
           if (Test-Path ${Env:PGROONGA_TEST_DATA}\pgroonga.log) {
             Get-Content ${Env:PGROONGA_TEST_DATA}\pgroonga.log
