@@ -157,7 +157,7 @@ jobs:
       - name: Install Build Tools
         run: |
           choco install meson
-          $env:PATH += ";C:\Program Files\Meson"
+          $env:PATH = "C:\Program Files\Meson;$env:PATH"
           echo "PATH=$env:PATH" | `
             Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Get-Command meson
@@ -177,12 +177,13 @@ jobs:
         if: ${{ matrix.postgresql-version-major >= 17 }}
         run: |
           # pg_regress.exe depends on libpq.dll and libpq.dll exists
-          # in pgsql\bin\. We need to set PATH or use same directory
-          # to resolve the dependency. We use the same directory approach.
-          # This must run BEFORE meson setup so find_program() finds the working copy.
-          Copy-Item `
-            -Path ..\pgsql\lib\pgxs\src\test\regress\pg_regress.exe `
-            -Destination ..\pgsql\bin\
+          # in pgsql\bin\. We add the bin directory to PATH so that
+          # pg_regress.exe can find libpq.dll.
+          # This must run BEFORE meson setup so the dependency is resolved.
+          $PGSQL_BIN = "$(Get-Location)\..\pgsql\bin"
+          $env:PATH = "$PGSQL_BIN;$env:PATH"
+          echo "PATH=$env:PATH" | `
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Configure PGroonga
         shell: cmd
         run: |
