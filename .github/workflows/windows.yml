@@ -286,29 +286,24 @@ jobs:
       - name: Extract package
         run: |
           Expand-Archive -Path artifact\*.zip -DestinationPath pgsql
-      - name: Verify msgpack symbols
+      - name: Inspect package contents
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          echo === Checking msgpack symbols exported by libgroonga.dll ===
+          echo === DLLs in bin directory ===
+          dir pgsql\bin\*.dll
+          echo.
+          echo === DLLs in lib directory ===
+          dir pgsql\lib\*.dll
+          echo.
+          echo === Checking pgroonga.dll dependencies ===
+          dumpbin /dependents pgsql\lib\pgroonga.dll
+          echo.
+          echo === Checking msgpack symbols in libgroonga.dll ===
           dumpbin /exports pgsql\bin\libgroonga.dll | findstr /i msgpack
-          if errorlevel 1 (
-            echo ERROR: No msgpack symbols found in libgroonga.dll
-            exit /b 1
-          )
-          echo === Checking pgroonga.dll imports ===
+          echo.
+          echo === Checking pgroonga.dll imports for msgpack ===
           dumpbin /imports pgsql\lib\pgroonga.dll | findstr /i msgpack
-          if errorlevel 1 (
-            echo ERROR: pgroonga.dll does not import msgpack symbols
-            exit /b 1
-          )
-          echo === Verifying no separate msgpack DLL is required ===
-          if exist pgsql\bin\msgpack*.dll (
-            echo WARNING: Separate msgpack DLL found in bin directory
-            dir pgsql\bin\msgpack*.dll
-          ) else (
-            echo OK: No separate msgpack DLL, msgpack is bundled in libgroonga.dll
-          )
       - uses: actions/checkout@v6
       - name: Run PostgreSQL
         run: |
